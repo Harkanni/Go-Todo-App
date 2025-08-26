@@ -58,7 +58,8 @@ func getTodoItem(id int) TODO {
 func moveTodoItemToCompleted(id int) []TODO {
 	if id < len(TODO_LIST) {
 		// remove from
-		Completed_Todo_list = append(TODO_LIST[:id], TODO_LIST[id+1])
+		TODO_LIST = append(TODO_LIST[:id], TODO_LIST[id+1])
+		Completed_Todo_list = append(Completed_Todo_list, TODO_LIST[id])
 	}
 
 	return Completed_Todo_list
