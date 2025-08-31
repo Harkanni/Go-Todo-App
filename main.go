@@ -18,8 +18,6 @@ type TODO struct {
 }
 
 var TODO_LIST = make([]TODO, 0)
-var Completed_Todo_list = make([]TODO, 0)
-var InProgress = make([]TODO, 0)
 
 func main() {
 	fmt.Println("Hello world")
@@ -33,8 +31,8 @@ func main() {
 	TODO_LIST = addTodoItem("CODE IN GOOO", TODO_LIST, (30 * time.Minute), "New", false)
 
 	// MOVE WASH MY CLOTHES TO COMPLETION
-	Completed_Todo_list = moveTodoItemToCompleted(0)
-	Completed_Todo_list = moveTodoItemToCompleted(0)
+	TODO_LIST = moveTodoItemToCompleted(0)
+	TODO_LIST = moveTodoItemToCompleted(1)
 
 	// GET ALL ITEMS
 	getAllTodoItems()
@@ -42,6 +40,8 @@ func main() {
 	// SEE ALL COMPLETED ITEMS
 	getAllCompletedItems()
 
+	// SEE ITEM STATUS
+	getItemStatus(0)
 }
 
 func addTodoItem(title string, TODO_LIST []TODO, duration time.Duration, status string, completed bool) []TODO {
@@ -82,30 +82,39 @@ func moveTodoItemToCompleted(id int) []TODO {
 		// remove from
 		TODO_LIST[id].completed = true
 		TODO_LIST[id].status = "Completed"
-		Completed_Todo_list = append(Completed_Todo_list, TODO_LIST[id])
-		TODO_LIST = append(TODO_LIST[:id], TODO_LIST[id+1:]...)
 	}
 	fmt.Print("\n\n\n")
-	return Completed_Todo_list
+	return TODO_LIST
 }
 
 func moveTodoItemToInProgress(id int) {
 	if id < len(TODO_LIST) {
-		InProgress = append(InProgress, TODO_LIST[id])
-		TODO_LIST = append(TODO_LIST[:id], TODO_LIST[id+1])
+		TODO_LIST[id].status = "In progress"
 	}
 }
 
-func getAllCompletedItems() []TODO {
+func getAllCompletedItems() {
 	// var result = []string{}
 	fmt.Println("See your completed Todos for the day bellow")
-	for _, TodoItem := range Completed_Todo_list {
-		fmt.Printf("You have \"%v\" on your list. it is %v. \n", TodoItem.title, TodoItem.status)
+	for _, TodoItem := range TODO_LIST {
+		if TodoItem.status == "Completed" {
+			fmt.Printf("You have \"%v\" on your list. it is %v. \n", TodoItem.title, TodoItem.status)
+		}
 	}
-	fmt.Print("\n\n\n")
-	return Completed_Todo_list
+	fmt.Print("\n")
 }
 
-func startATodoItem(id int) {
+func startATodoItem(id int) []TODO {
+	if id < len(TODO_LIST) {
+		TODO_LIST[id].status = "In progress"
+	}
+	return TODO_LIST
+}
 
+func getItemStatus(id int) {
+	if id < len(TODO_LIST) {
+
+		fmt.Printf("%v", TODO_LIST[id].status)
+	}
+	fmt.Println("Not Found")
 }
